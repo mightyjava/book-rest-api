@@ -26,4 +26,7 @@ public interface Resource<T> {
 	
 	@DeleteMapping("{id}")
 	ResponseEntity<String> deleteById(@PathVariable Long id);
+	
+	@GetMapping("/invalid")
+	ResponseEntity<String> invalid();
 }
