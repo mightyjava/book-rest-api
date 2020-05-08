@@ -2,6 +2,8 @@ package com.mightyjava.resource.impl;
 
 import java.util.Collection;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +58,13 @@ public class BookResourceImpl implements Resource<Book> {
 	@Override
 	public ResponseEntity<String> invalid() {
 		log.info("BookResourceImpl - invalid");
-		return new ResponseEntity<>("{'message':'something is missing, please check everything before sending the request!!!'}", HttpStatus.OK);
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("message", "something is missing, please check everything before sending the request!!!");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
 	}
 
 }
