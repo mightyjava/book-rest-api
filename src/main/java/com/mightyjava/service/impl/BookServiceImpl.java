@@ -1,6 +1,7 @@
 package com.mightyjava.service.impl;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -23,8 +24,8 @@ public class BookServiceImpl implements IService<Book> {
 	}
 
 	@Override
-	public Book findById(Long id) {
-		return bookRepository.findById(id).get();
+	public Optional<Book> findById(Long id) {
+		return bookRepository.findById(id);
 	}
 
 	@Override

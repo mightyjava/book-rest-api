@@ -1,6 +1,7 @@
 package com.mightyjava.resource.impl;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mightyjava.domain.Book;
+import com.mightyjava.exception.ApplicationException;
+import com.mightyjava.exception.BookNotFoundException;
 import com.mightyjava.resource.Resource;
 import com.mightyjava.service.IService;
 
@@ -34,24 +37,38 @@ public class BookResourceImpl implements Resource<Book> {
 	@Override
 	public ResponseEntity<Book> findById(Long id) {
 		log.info("BookResourceImpl - findById");
-		return new ResponseEntity<>(bookService.findById(id), HttpStatus.OK);
+		Optional<Book> book = bookService.findById(id);
+		if(!book.isPresent()) {
+			throw new BookNotFoundException("Book not found");
+		}
+		return new ResponseEntity<>(book.get(), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Book> save(Book book) {
 		log.info("BookResourceImpl - save");
+		if(book.getId() != null) {
+			throw new ApplicationException("Book ID found, ID is not required for save the data");
+		}
 		return new ResponseEntity<>(bookService.saveOrUpdate(book), HttpStatus.CREATED);
 	}
 
 	@Override
 	public ResponseEntity<Book> update(Book book) {
 		log.info("BookResourceImpl - update");
+		if(book.getId() == null) {
+			throw new ApplicationException("Book ID not found, ID is required for update the data");
+		}
 		return new ResponseEntity<>(bookService.saveOrUpdate(book), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<String> deleteById(Long id) {
 		log.info("BookResourceImpl - deleteById");
+		Optional<Book> book = bookService.findById(id);
+		if(!book.isPresent()) {
+			throw new BookNotFoundException("Book not found");
+		}
 		return new ResponseEntity<>(bookService.deleteById(id), HttpStatus.OK);
 	}
 
