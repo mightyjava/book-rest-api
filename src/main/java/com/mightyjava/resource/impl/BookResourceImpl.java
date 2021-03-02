@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +17,12 @@ import com.mightyjava.exception.BookNotFoundException;
 import com.mightyjava.resource.Resource;
 import com.mightyjava.service.IService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/books")
 public class BookResourceImpl implements Resource<Book> {
-	
-	private static Logger log = LoggerFactory.getLogger(BookResourceImpl.class);
 	
 	@Autowired
 	private IService<Book> bookService;
