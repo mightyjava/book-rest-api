@@ -1,6 +1,8 @@
 package com.mightyjava.resource.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.codehaus.jettison.json.JSONException;
@@ -19,53 +21,73 @@ import com.mightyjava.service.IService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @Slf4j
 @RestController
 @RequestMapping("/books")
 public class BookResourceImpl implements Resource<Book> {
-	
+
 	@Autowired
 	private IService<Book> bookService;
 
 	@Override
 	public ResponseEntity<Collection<Book>> findAll() {
 		log.info("BookResourceImpl - findAll");
-		return new ResponseEntity<>(bookService.findAll(), HttpStatus.OK);
+		Collection<Book> books = bookService.findAll();
+		List<Book> response = new ArrayList<>();
+		books.forEach(book -> {
+			book.add(linkTo(methodOn(BookResourceImpl.class).findById(book.getId())).withSelfRel());
+			response.add(book);
+		});
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Book> findById(Long id) {
 		log.info("BookResourceImpl - findById");
+		Book bookObject = null;
 		Optional<Book> book = bookService.findById(id);
-		if(!book.isPresent()) {
+		if (!book.isPresent()) {
 			throw new BookNotFoundException("Book not found");
+		} else {
+			bookObject = book.get();
+			bookObject.add(linkTo(methodOn(BookResourceImpl.class).findAll()).withSelfRel());
 		}
-		return new ResponseEntity<>(book.get(), HttpStatus.OK);
+		return new ResponseEntity<>(bookObject, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Book> save(Book book) {
 		log.info("BookResourceImpl - save");
-		if(book.getId() != null) {
+		if (book.getId() != null) {
 			throw new ApplicationException("Book ID found, ID is not required for save the data");
+		} else {
+			Book savedBook = bookService.saveOrUpdate(book);
+			savedBook.add(linkTo(methodOn(BookResourceImpl.class).findById(savedBook.getId())).withSelfRel());
+			savedBook.add(linkTo(methodOn(BookResourceImpl.class).findAll()).withSelfRel());
+			return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<>(bookService.saveOrUpdate(book), HttpStatus.CREATED);
 	}
 
 	@Override
 	public ResponseEntity<Book> update(Book book) {
 		log.info("BookResourceImpl - update");
-		if(book.getId() == null) {
+		if (book.getId() == null) {
 			throw new ApplicationException("Book ID not found, ID is required for update the data");
+		} else {
+			Book updatedBook = bookService.saveOrUpdate(book);
+			updatedBook.add(linkTo(methodOn(BookResourceImpl.class).findById(updatedBook.getId())).withSelfRel());
+			updatedBook.add(linkTo(methodOn(BookResourceImpl.class).findAll()).withSelfRel());
+			return new ResponseEntity<>(updatedBook, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(bookService.saveOrUpdate(book), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<String> deleteById(Long id) {
 		log.info("BookResourceImpl - deleteById");
 		Optional<Book> book = bookService.findById(id);
-		if(!book.isPresent()) {
+		if (!book.isPresent()) {
 			throw new BookNotFoundException("Book not found");
 		}
 		return new ResponseEntity<>(bookService.deleteById(id), HttpStatus.OK);

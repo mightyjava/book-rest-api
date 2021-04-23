@@ -2,7 +2,7 @@
 	http://localhost:8081/rest/books
 
 # GET By ID
-	http://localhost:8081/rest/books/100
+	http://localhost:8081/rest/books/1
 
 # POST
 	http://localhost:8081/rest/books
@@ -11,7 +11,7 @@
 	http://localhost:8081/rest/books
 
 # DELETE
-	http://localhost:8081/rest/books/100
+	http://localhost:8081/rest/books/1
 
 # Requests
 
