@@ -1,5 +1,8 @@
 package com.mightyjava.resource.impl;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,8 +23,6 @@ import com.mightyjava.resource.Resource;
 import com.mightyjava.service.IService;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Slf4j
 @RestController
