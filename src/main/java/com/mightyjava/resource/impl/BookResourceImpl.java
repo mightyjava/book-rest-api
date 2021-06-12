@@ -3,9 +3,11 @@ package com.mightyjava.resource.impl;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,6 +16,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,6 +86,23 @@ public class BookResourceImpl implements Resource<Book> {
 			updatedBook.add(linkTo(methodOn(BookResourceImpl.class).findAll()).withSelfRel());
 			return new ResponseEntity<>(updatedBook, HttpStatus.OK);
 		}
+	}
+
+	@Override
+	public ResponseEntity<Book> patch(UUID id, Map<Object, Object> fields) {
+		Optional<Book> book = bookService.findById(id);
+		if (book.isPresent()) {
+			fields.forEach((key, value) -> {
+				Field field = ReflectionUtils.findField(Book.class, (String) key);
+				field.setAccessible(true);
+				ReflectionUtils.setField(field, book.get(), value);
+			});
+			Book updatedBook = bookService.saveOrUpdate(book.get());
+			updatedBook.add(linkTo(methodOn(BookResourceImpl.class).findById(updatedBook.getId())).withSelfRel());
+			updatedBook.add(linkTo(methodOn(BookResourceImpl.class).findAll()).withSelfRel());
+			return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+		}
+		return null;
 	}
 
 	@Override
