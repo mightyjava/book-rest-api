@@ -1,13 +1,13 @@
 # GET
 	http://localhost:8081/rest/books
 # GET By ID
-	http://localhost:8081/rest/books/1
+	http://localhost:8081/rest/books/cff6c1c3-be92-4cb3-9c79-5a67f63a3d61
 # POST
 	http://localhost:8081/rest/books
 # PUT
 	http://localhost:8081/rest/books
 # DELETE
-	http://localhost:8081/rest/books/1
+	http://localhost:8081/rest/books/cff6c1c3-be92-4cb3-9c79-5a67f63a3d61
 	
 <hr/>
 

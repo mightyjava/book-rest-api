@@ -2,13 +2,14 @@ package com.mightyjava.service;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface IService<T> {
 	Collection<T> findAll();
 	
-	Optional<T> findById(Long id);
+	Optional<T> findById(UUID id);
 	
 	T saveOrUpdate(T t);
 	
-	String deleteById(Long id);
+	String deleteById(UUID id);
 }

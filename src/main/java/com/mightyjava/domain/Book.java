@@ -1,5 +1,7 @@
 package com.mightyjava.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,7 +23,7 @@ public class Book extends RepresentationModel<Book> {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private UUID id;
 	private String title;
 	private String author;
 	private String coverPhotoURL;
@@ -30,7 +32,7 @@ public class Book extends RepresentationModel<Book> {
 	private String language;
 
 	@JsonCreator
-	public Book(@JsonProperty("id") Long id, @JsonProperty("title") String title, @JsonProperty("author") String author,
+	public Book(@JsonProperty("id") UUID id, @JsonProperty("title") String title, @JsonProperty("author") String author,
 			@JsonProperty("coverPhotoURL") String coverPhotoURL, @JsonProperty("isbnNumber") Long isbnNumber,
 			@JsonProperty("price") Double price, @JsonProperty("language") String language) {
 		this.id = id;

@@ -2,6 +2,7 @@ package com.mightyjava.service.impl;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -24,7 +25,7 @@ public class BookServiceImpl implements IService<Book> {
 	}
 
 	@Override
-	public Optional<Book> findById(Long id) {
+	public Optional<Book> findById(UUID id) {
 		return bookRepository.findById(id);
 	}
 
@@ -34,7 +35,7 @@ public class BookServiceImpl implements IService<Book> {
 	}
 
 	@Override
-	public String deleteById(Long id) {
+	public String deleteById(UUID id) {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			bookRepository.deleteById(id);

@@ -1,6 +1,7 @@
 package com.mightyjava.resource;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +17,16 @@ public interface Resource<T> {
 	ResponseEntity<Collection<T>> findAll();
 	
 	@GetMapping("{id}")
-	ResponseEntity<T> findById(@PathVariable Long id);
+	ResponseEntity<T> findById(@PathVariable UUID id);
 	
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<T> save(@RequestBody T t);
 	
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<T> update(@RequestBody T t);
 	
 	@DeleteMapping("{id}")
-	ResponseEntity<String> deleteById(@PathVariable Long id);
+	ResponseEntity<String> deleteById(@PathVariable UUID id);
 	
 	@GetMapping("/invalid")
 	ResponseEntity<String> invalid();

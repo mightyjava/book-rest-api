@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -45,7 +46,7 @@ public class BookResourceImpl implements Resource<Book> {
 	}
 
 	@Override
-	public ResponseEntity<Book> findById(Long id) {
+	public ResponseEntity<Book> findById(UUID id) {
 		log.info("BookResourceImpl - findById");
 		Book bookObject = null;
 		Optional<Book> book = bookService.findById(id);
@@ -85,7 +86,7 @@ public class BookResourceImpl implements Resource<Book> {
 	}
 
 	@Override
-	public ResponseEntity<String> deleteById(Long id) {
+	public ResponseEntity<String> deleteById(UUID id) {
 		log.info("BookResourceImpl - deleteById");
 		Optional<Book> book = bookService.findById(id);
 		if (!book.isPresent()) {
