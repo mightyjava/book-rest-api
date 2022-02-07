@@ -44,4 +44,13 @@ public class Book extends RepresentationModel<Book> {
 		this.language = language;
 	}
 
+	public Book(String title, String author, String coverPhotoURL, Long isbnNumber, Double price, String language) {
+		this.title = title;
+		this.author = author;
+		this.coverPhotoURL = coverPhotoURL;
+		this.isbnNumber = isbnNumber;
+		this.price = price;
+		this.language = language;
+	}
+
 }

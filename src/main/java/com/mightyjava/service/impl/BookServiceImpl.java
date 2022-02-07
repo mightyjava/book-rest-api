@@ -1,6 +1,7 @@
 package com.mightyjava.service.impl;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ import com.mightyjava.service.IService;
 
 @Service
 public class BookServiceImpl implements IService<Book> {
-	
+
 	@Autowired
 	private BookRepository bookRepository;
 
@@ -44,6 +45,11 @@ public class BookServiceImpl implements IService<Book> {
 			e.printStackTrace();
 		}
 		return jsonObject.toString();
+	}
+
+	@Override
+	public List<Book> saveAll(List<Book> books) {
+		return bookRepository.saveAll(books);
 	}
 
 }
