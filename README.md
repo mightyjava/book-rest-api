@@ -10,6 +10,10 @@
 	http://localhost:8081/rest/books/cff6c1c3-be92-4cb3-9c79-5a67f63a3d61
 # DELETE
 	http://localhost:8081/rest/books/cff6c1c3-be92-4cb3-9c79-5a67f63a3d61
+# Image QR Code
+	http://localhost:8081/rest/books/generateImageQRCode/{bookId}
+# Byte QR Code
+	http://localhost:8081/rest/books/generateByteQRCode/{bookId}	
 	
 <hr/>
 

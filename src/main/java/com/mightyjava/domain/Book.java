@@ -30,6 +30,7 @@ public class Book extends RepresentationModel<Book> {
 	private Long isbnNumber;
 	private Double price;
 	private String language;
+	private byte[] base64QRCode;
 
 	@JsonCreator
 	public Book(@JsonProperty("id") UUID id, @JsonProperty("title") String title, @JsonProperty("author") String author,

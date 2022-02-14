@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +27,7 @@ import com.mightyjava.exception.ApplicationException;
 import com.mightyjava.exception.BookNotFoundException;
 import com.mightyjava.resource.Resource;
 import com.mightyjava.service.IService;
+import com.mightyjava.util.MethodUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +38,38 @@ public class BookResourceImpl implements Resource<Book> {
 
 	@Autowired
 	private IService<Book> bookService;
+
+	private final String imagePath = "./src/main/resources/qrcodes/QRCode.png";
+
+	@GetMapping("/generateByteQRCode/{bookId}")
+	public ResponseEntity<Book> generateByteQRCode(@PathVariable("bookId") UUID bookId) {
+		log.info("BookResourceImpl - generateByteQRCode");
+		Book bookObject = null;
+		Optional<Book> book = bookService.findById(bookId);
+		if (!book.isPresent()) {
+			throw new BookNotFoundException("Book not found");
+		} else {
+			bookObject = book.get();
+			bookObject.setBase64QRCode(MethodUtils.generateByteQRCode(bookObject.getCoverPhotoURL(), 250, 250));
+			bookObject.add(linkTo(methodOn(BookResourceImpl.class).findAll()).withSelfRel());
+		}
+		return new ResponseEntity<>(bookObject, HttpStatus.OK);
+	}
+
+	@GetMapping("/generateImageQRCode/{bookId}")
+	public ResponseEntity<Book> generateImageQRCode(@PathVariable("bookId") UUID bookId) {
+		log.info("BookResourceImpl - generateImageQRCode");
+		Book bookObject = null;
+		Optional<Book> book = bookService.findById(bookId);
+		if (!book.isPresent()) {
+			throw new BookNotFoundException("Book not found");
+		} else {
+			bookObject = book.get();
+			MethodUtils.generateImageQRCode(bookObject.getCoverPhotoURL(), 250, 250, imagePath);
+			bookObject.add(linkTo(methodOn(BookResourceImpl.class).findAll()).withSelfRel());
+		}
+		return new ResponseEntity<>(bookObject, HttpStatus.OK);
+	}
 
 	@Override
 	public ResponseEntity<Collection<Book>> findAll() {
